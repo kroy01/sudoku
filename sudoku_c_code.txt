@@ -1,0 +1,408 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+void printBoard(int board[9][9]);
+int columnSearch(int board[9][9], int x, int c);
+int rowSearch(int board[9][9], int x, int r);
+int block11Search(int board[9][9], int x);
+int block12Search(int board[9][9], int x);
+int block13Search(int board[9][9], int x);
+int block21Search(int board[9][9], int x);
+int block22Search(int board[9][9], int x);
+int block23Search(int board[9][9], int x);
+int block31Search(int board[9][9], int x);
+int block32Search(int board[9][9], int x);
+int block33Search(int board[9][9], int x);
+int blockSearch(int board[9][9], int x, int r, int c);
+void input(int board[9][9], int r, int c, int x);
+int game_endChecker(int board[9][9]);
+
+
+int board1[9][9]={{4,3,5,2,6,9,7,8,1},{6,8,2,5,7,1,4,9,3},{1,9,7,8,3,4,5,6,2},
+{8,2,6,1,9,5,3,4,7},{3,7,4,6,8,2,9,1,5},{9,5,1,7,4,3,6,2,8},{5,1,9,3,2,6,8,7,4},
+{2,4,8,9,5,7,1,3,6},{7,0,3,0,1,8,2,5,9}}; //for testing the code
+
+int main()
+{
+	int board[9][9];
+	int r=0, c=0, x=0;
+	int GECondition=0;
+
+	//initializing board element values as 0
+	for(int i=0; i<9; i++)
+	{
+		for(int j=0; j<9; j++)
+		{
+			board[i][j]=0;
+		}
+	}
+
+	for(int i=0; i<9; i++)// for testing the code
+	{
+		for(int j=0; j<9; j++)
+		{
+			board[i][j]=board1[i][j];
+		}
+	}
+
+	printf("PUZZLE GAME : SUDOKU\n\nBOARD Setup:\n");
+	printBoard(board);
+
+	for(; ;)
+	{
+		input(board, r, c, x);
+		GECondition = game_endChecker(board);
+		if(GECondition == 1)
+		{
+			printf("CONGRATULATIONS!!!\nYOU HAVE SOLVED THE PUZZLE\nTHANK YOU FOR PLAYING");
+			break;
+		}else{
+			continue;
+		}
+	}
+
+	return 0;
+}
+
+void printBoard(int board[9][9])
+{
+	printf("\n    1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  |\n\n");
+
+	for(int i=0; i<9; i++)
+	{
+		printf("%d  ", i+1);
+		for(int j=0; j<9; j++)
+		{
+			printf("%3d |", board[i][j]);
+		}
+		printf("\n_  -----------------------------------------------\n");
+	}
+	printf("\n");
+}
+
+int columnSearch(int board[9][9], int x, int c)
+{
+	int count=0;
+	for(int i=0; i<9; i++)
+	{
+		if((board[i][c-1]==x)&&(x!=0))
+		{
+			count++;
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int rowSearch(int board[9][9], int x, int r)
+{
+	int count=0;
+	for(int i=0; i<9; i++)
+	{
+		if((board[r-1][i]==x)&&(x!=0))
+		{
+			count++;
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int block11Search(int board[9][9], int x)
+{
+	int count=0;
+	for(int i=0; i<3; i++)
+	{
+		for(int j=0; j<3; j++)
+		{
+			if((board[i][j]==x)&&(x!=0))
+			{
+				count++;
+			}
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int block12Search(int board[9][9], int x)
+{
+	int count=0;
+	for(int i=0; i<3; i++)
+	{
+		for(int j=3; j<6; j++)
+		{
+			if((board[i][j]==x)&&(x!=0))
+			{
+				count++;
+			}
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int block13Search(int board[9][9], int x)
+{
+	int count=0;
+	for(int i=0; i<3; i++)
+	{
+		for(int j=6; j<9; j++)
+		{
+			if((board[i][j]==x)&&(x!=0))
+			{
+				count++;
+			}
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int block21Search(int board[9][9], int x)
+{
+	int count=0;
+	for(int i=3; i<6; i++)
+	{
+		for(int j=0; j<3; j++)
+		{
+			if((board[i][j]==x)&&(x!=0))
+			{
+				count++;
+			}
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int block22Search(int board[9][9], int x)
+{
+	int count=0;
+	for(int i=3; i<6; i++)
+	{
+		for(int j=3; j<6; j++)
+		{
+			if((board[i][j]==x)&&(x!=0))
+			{
+				count++;
+			}
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int block23Search(int board[9][9], int x)
+{
+	int count=0;
+	for(int i=3; i<6; i++)
+	{
+		for(int j=6; j<9; j++)
+		{
+			if((board[i][j]==x)&&(x!=0))
+			{
+				count++;
+			}
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int block31Search(int board[9][9], int x)
+{
+	int count=0;
+	for(int i=6; i<9; i++)
+	{
+		for(int j=0; j<3; j++)
+		{
+			if((board[i][j]==x)&&(x!=0))
+			{
+				count++;
+			}
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int block32Search(int board[9][9], int x)
+{
+	int count=0;
+	for(int i=6; i<9; i++)
+	{
+		for(int j=3; j<6; j++)
+		{
+			if((board[i][j]==x)&&(x!=0))
+			{
+				count++;
+			}
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int block33Search(int board[9][9], int x)
+{
+	int count=0;
+	for(int i=6; i<9; i++)
+	{
+		for(int j=6; j<9; j++)
+		{
+			if((board[i][j]==x)&&(x!=0))
+			{
+				count++;
+			}
+		}
+	}
+	if(count==1)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int blockSearch(int board[9][9], int x, int r, int c)
+{
+	int k=0;
+	if((r<=3)&&(r>0)&&(c<=3)&&(c>0))
+	{
+		k = block11Search(board, x);
+	}else if((r<=3)&&(r>0)&&(c<=6)&&(c>3))
+	{
+		k = block12Search(board, x);
+	}else if((r<=3)&&(r>0)&&(c<=9)&&(c>6))
+	{
+		k = block13Search(board, x);
+	}else if((r<=6)&&(r>3)&&(c<=3)&&(c>0))
+	{
+		k = block21Search(board, x);
+	}else if((r<=6)&&(r>3)&&(c<=6)&&(c>3))
+	{
+		k = block22Search(board, x);
+	}else if((r<=6)&&(r>3)&&(c<=9)&&(c>6))
+	{
+		k = block23Search(board, x);
+	}else if((r<=9)&&(r>6)&&(c<=3)&&(c>0))
+	{
+		k = block31Search(board, x);
+	}else if((r<=9)&&(r>6)&&(c<=6)&&(c>3))
+	{
+		k = block32Search(board, x);
+	}else if((r<=9)&&(r>6)&&(c<=9)&&(c>6))
+	{
+		k = block33Search(board, x);
+	}
+
+	return k;
+}
+
+void input(int board[9][9], int r, int c, int x)
+{
+	for(; ;)
+	{
+		r=0;
+		c=0;
+		x=0;
+		int condition=0, con1=0, con2=0, con3=0;
+		printf("\nRow : ");
+		scanf("%d", &r);
+		printf("\nColumn : ");
+		scanf("%d", &c);
+		if((r<=9)&&(r>0)&&(c<=9)&&(c>0))
+		{
+			printf("Input : ");
+			scanf("%d", &x);
+			if((x<=9)&&(x>0))
+			{
+				board[r-1][c-1]=x;
+				con1 = rowSearch(board, x, r);
+				con2 = columnSearch(board, x, c);
+				con3 = blockSearch(board, x, r, c);
+				condition = con1*con2*con3;
+				if(condition==1)
+				{
+					printBoard(board);
+					break;
+				}else{
+					board[r-1][c-1]=0;
+					printf("\ninput cannot be taken as it violates at least one of the conditions\n");
+					continue;
+				}
+			}else{
+				printf("\ninvalid input, please try again\n");
+				continue;
+			}
+		}else{
+			printf("\ninvalid input, please try again\n");
+			continue;
+		}
+	}
+}
+
+int game_endChecker(int board[9][9])
+{
+	int count=0;
+	for(int i=0; i<9; i++)
+	{
+		for(int j=0; j<9; j++)
+		{
+			if(board[i][j]==0)
+			{
+				return 0;
+				break;
+			}else{
+				count++;
+			}
+		}
+	}
+	if(count==81)
+	{
+		return 1;
+	}else{
+		return 0;
+	}
+}
